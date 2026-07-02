@@ -1,6 +1,5 @@
 package com.ecommerce.project.controller;
 
-import com.ecommerce.project.model.Product;
 import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.payload.ProductResponse;
 import com.ecommerce.project.service.ProductService;
@@ -17,10 +16,10 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping("/admin/categories/{categoryId}/product")
-    public ResponseEntity<ProductDTO> addProduct(@RequestBody Product product,
+    public ResponseEntity<ProductDTO> addProduct(@RequestBody ProductDTO productDTO,
                                                  @PathVariable Long categoryId){
-        ProductDTO productDTO = productService.addProduct(categoryId, product);
-        return new ResponseEntity<>(productDTO, HttpStatus.CREATED);
+        ProductDTO saveProductDTO = productService.addProduct(categoryId, productDTO);
+        return new ResponseEntity<>(saveProductDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/public/products")
@@ -41,9 +40,14 @@ public class ProductController {
         return new ResponseEntity<>(productResponse, HttpStatus.FOUND);
     }
     @PutMapping("/admin/products/{productId}")
-    public ResponseEntity<ProductDTO> updateProduct(@RequestBody Product product,
+    public ResponseEntity<ProductDTO> updateProduct(@RequestBody ProductDTO productDTO,
                                                     @PathVariable Long productId){
-        ProductDTO updateProductDTO = productService.updateProduct(productId, product);
+        ProductDTO updateProductDTO = productService.updateProduct(productId, productDTO);
         return new ResponseEntity<>(updateProductDTO, HttpStatus.OK);
+    }
+    @DeleteMapping("/admin/products/{productId}")
+    public ResponseEntity<ProductDTO> deleteProduct(@PathVariable Long productId){
+        ProductDTO deleteProduct = productService.deleteProduct(productId);
+        return new ResponseEntity<>(deleteProduct, HttpStatus.OK);
     }
 }
